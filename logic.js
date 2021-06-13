@@ -11,17 +11,11 @@ const operadores = [
 const asings = "<asign>";
 const term = "<term>";
 
-const desagregarLasInstruciones = (input) => {
-  const desagregarLasInstruciones = [[]];
-  let inForce = 0;
-  for (let i = 0; i < input.length; i++) {
-    desagregarLasInstruciones[inForce].push(input[i]);
-    if (input[i] === term) {
-      i !== input.length - 1 && desagregarLasInstruciones.push([]);
-      inForce++;
-    }
-  }
-  return desagregarLasInstruciones;
+const revisarTermino = (term) => {
+  const result = cantidadDeNumeroDePruebas(term[0]) || variable(term[0]);
+  console.log(`Termino: ${result}, ${term}`);
+  console.log('-----------------------------------------------------------------------------------------------------------')
+  return result;
 };
 
 const puntoYComa = (input) => {
@@ -53,9 +47,14 @@ const instruction = (instruction) => {
   return result;
 };
 
-const revisarTermino = (term) => {
-  const result = cantidadDeNumeroDePruebas(term[0]) || variable(term[0]);
-  console.log(`Termino: ${result}, ${term}`);
+const pruebaDeSegundoTermino = (pruebaDeSegundoTermino) => {
+  let result;
+  if (pruebaDeSegundoTermino.length === 1) {
+    result = revisarTermino(pruebaDeSegundoTermino)
+  } else {
+    result = pruebasDeComparacion(pruebaDeSegundoTermino);
+  }
+  console.log(`Segundo termino: ${result}, ${pruebaDeSegundoTermino}`);
   console.log('-----------------------------------------------------------------------------------------------------------')
   return result;
 };
@@ -68,29 +67,6 @@ const expre = (expre) => {
     result = pruebasDeComparacion(expre);
   }
   console.log(`Expresión: ${result}, ${expre}`);
-  console.log('-----------------------------------------------------------------------------------------------------------')
-  return result;
-};
-
-const asignados = (asignados) => {  //nombre
-  let result;
-  if (variable(asignados[0]) && pruebaDeAsignacionDeComparadores(asignados[1])) {
-    result = pruebaDeSegundoTermino(asignados.slice(2, asignados.length))
-  } else {
-    result = false;
-  }
-  console.log(`Asignación: ${result}, ${asignados}`);
-  return result;
-};
-
-const pruebaDeSegundoTermino = (pruebaDeSegundoTermino) => {
-  let result;
-  if (pruebaDeSegundoTermino.length === 1) {
-    result = revisarTermino(pruebaDeSegundoTermino)
-  } else {
-    result = pruebasDeComparacion(pruebaDeSegundoTermino);
-  }
-  console.log(`Segundo termino: ${result}, ${pruebaDeSegundoTermino}`);
   console.log('-----------------------------------------------------------------------------------------------------------')
   return result;
 };
@@ -108,9 +84,31 @@ const pruebasDeComparacion = (pruebasDeComparacion) => {
   return result;
 };
 
+const asignados = (asignados) => {  //nombre
+  let result;
+  if (variable(asignados[0]) && pruebaDeAsignacionDeComparadores(asignados[1])) {
+    result = pruebaDeSegundoTermino(asignados.slice(2, asignados.length))
+  } else {
+    result = false;
+  }
+  console.log(`Asignación: ${result}, ${asignados}`);
+  return result;
+};
+
+
+
+
+
 const variable = (variable) => {
   const result = variable === varTag;
   console.log(`Variable: ${result}, ${variable}`);
+  console.log('-----------------------------------------------------------------------------------------------------------')
+  return result;
+};
+
+const pruebaDeAsignacionDeComparadores = (input) => { 
+  const result = input === asings;
+  console.log(`Asignación de comparador: ${result} , ${input}`);
   console.log('-----------------------------------------------------------------------------------------------------------')
   return result;
 };
@@ -129,11 +127,19 @@ const pruebaDeComparadorDeOperadores = (operator) => {
   return result;
 };
 
-const pruebaDeAsignacionDeComparadores = (input) => { 
-  const result = input === asings;
-  console.log(`Asignación de comparador: ${result} , ${input}`);
-  console.log('-----------------------------------------------------------------------------------------------------------')
-  return result;
+
+
+const desagregarLasInstruciones = (input) => {
+  const desagregarLasInstruciones = [[]];
+  let inForce = 0;
+  for (let i = 0; i < input.length; i++) {
+    desagregarLasInstruciones[inForce].push(input[i]);
+    if (input[i] === term) {
+      i !== input.length - 1 && desagregarLasInstruciones.push([]);
+      inForce++;
+    }
+  }
+  return desagregarLasInstruciones;
 };
 
 module.exports = {
